@@ -6,7 +6,7 @@ from sklearn.metrics import accuracy_score
 
 #初始化变量
 class_num=10
-features_len=28*28
+feature_len=28*28
 
 # 二值化
 def binaryzation(img:torch.Tensor)->torch.Tensor:
