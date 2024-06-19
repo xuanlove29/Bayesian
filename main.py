@@ -2,7 +2,6 @@ import numpy as np
 import time
 import torch
 import read
-from sklearn.metrics import accuracy_score
 
 #初始化变量
 class_num=10
@@ -10,7 +9,7 @@ feature_len=28*28
 
 # 二值化
 def binaryzation(img:torch.Tensor)->torch.Tensor:
-    bin_img=torch.where(img>50,1,0)
+    bin_img=torch.where(img>50,1,0).reshape(feature_len)
     return bin_img
 # 训练
 def Train(trainset, train_labels):
@@ -22,7 +21,7 @@ def Train(trainset, train_labels):
 
         img = binaryzation(trainset[i])  # 图片二值化   对每一个图片进行二值化
 
-        label = train_labels[i]  # 对每一张图片赋予标签
+        label = int(train_labels[i])  # 对每一张图片赋予标签
 
         prior_probability[label] += 1  # 先验概率，总要计算出训练集中同一种标签的数量，比如说是数字1的图片有多少张
 
@@ -90,17 +89,14 @@ if __name__ == '__main__':
     print('read data cost ', time_2 - time_1, ' second', '\n')
 
     print('Start training')
-    prior_probability, conditional_probability = Train(imgs, labels)
+    prior_probability, conditional_probability = Train(imgs[:2000], labels[:2000])
     time_3 = time.time()
     print('training cost ', time_3 - time_2, ' second', '\n')
 
-    test_imgs = read.images('mnist_test')
-    test_labels = read.labels('minist_testlabel')  # 取出测试集标签值
 
     print('Start predicting')
-    test_predict = Predict(test_imgs, prior_probability, conditional_probability)
+    test_predict = Predict(imgs[2010:2160], prior_probability, conditional_probability)
     time_4 = time.time()
     print('predicting cost ', time_4 - time_3, ' second', '\n')
-
-    score = accuracy_score(test_labels, test_predict)
-    print("The accruacy socre is ", score)
+    score=torch.count_nonzero(torch.eq(labels[2010:2160],test_predict))/len(labels[2010:2160])
+    print("The accruacy socre is ", float(score))

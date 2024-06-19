@@ -1,5 +1,6 @@
 import torch
-
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 def images(filename):
     with open(filename, 'rb') as f:
         # 读取文件头信息
