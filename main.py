@@ -83,8 +83,8 @@ if __name__ == '__main__':
     print('Start read data')
 
     time_1 = time.time()
-    imgs = read.images('minist')  # 取出像素值
-    labels = read.labels('ministlabel')  # 取出标签值
+    imgs = read.images('dataset/minist')  # 取出像素值
+    labels = read.labels('dataset/ministlabel')  # 取出标签值
     time_2 = time.time()
     print('read data cost ', time_2 - time_1, ' second', '\n')
 
